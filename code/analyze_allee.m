@@ -3,6 +3,7 @@ close all; clear all; clc
 % This script ensures that the Allee effect model (odefunAllee) works for a
 % set of input conditions, and analyzes the resutling effects of growth
 % with various parameters and initial conditions
+%%
 t = 1:2:100;
 tbig = repmat(t, 5, 1);
 tlong = reshape(tbig, [size(tbig,1)*size(tbig,2), 1]);

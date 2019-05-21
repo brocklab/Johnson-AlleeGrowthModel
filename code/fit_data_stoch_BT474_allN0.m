@@ -2,6 +2,8 @@
  %birth-death model and the Allee model
 
 clear all; close all; clc
+mudatavec = [];
+vardatavec = [];
 %% load this chunk to fit actual data 
 S = load('../out/BTfit.mat');
 BT= S.BT;
@@ -76,6 +78,11 @@ plot(timevec, vardatavec,'*')
 xlabel('time')
 ylabel('variance in cell number')
 title('variance in cell number all data')
+
+%% DOWNSAMPLE!
+% run this chunk to downsample the data from the time vec and the
+% corresponding mudatavec and vardatavec
+
 %% Now need to figure out how to generate concatenated model trajectories
 % SINGLE EXPONENTIAL MODEL FIT
 % rewrote the functions so that they take a time vecto and a N0 vector that
@@ -120,14 +127,15 @@ pbxform = @(phat)[1 1].*exp(phat); %'backward' parameter transform into model sp
 yfxform = @(y)log(y); % 'forward' transform for data and model output
 ybxform = @(yhat)exp(yhat); % 'inverse' transform for data and model output
 
-% Two observations to fit on, mu_data and var_data
+%% Two observations to fit on, mu_data and var_data
 % both use tsamp
-
+pt1= length(mudatavec)-20;
+pt2= length(mudatavec)-5;
 % Initial guess
-bguess = (yfxform(mudatavec(end-5))-yfxform(mudatavec(end-20)))/(timevec(end-5)-timevec(end-20)) + 0.001; 
+bguess = ((yfxform(mudatavec(pt2)))-(yfxform(mudatavec(pt1))))/(timevec(pt2)-timevec(pt1)) + 0.001; 
 dguess = 0.001;
 theta = [bguess,dguess];
-
+%%
 % Compute the negative log likelihood not using log transforms!
 
 J = @(phat) (sum(((mudatavec-modelfun_mu(pbxform(phat))).^2)./(2.*sqrt(var_in_mean(pbxform(phat)))) + log(sqrt(var_in_mean(pbxform(phat)))) + 0.5*log(2*pi))+...
@@ -143,7 +151,7 @@ negLLfit= objfun_J(phatbest_J)
 params_best_J= pbxform(phatbest_J)
 
 k = 2;
-n = N;% or should this be the number of trajectories???
+n = length(timevec);% or should this be the number of trajectories???
 %n=numsamps;
 AICbd = 2*J(pfxform(params_best_J)) + 2*k
 BICbd = 2*J(pfxform(params_best_J)) +log(n)*k
@@ -479,8 +487,8 @@ BICbd = 2*J(pfxform(lowestLLparams)) +log(n)*k
 
 %% PERFORM FITTING OF ALL DATA TO B-D-A MODEL
 p = [0.0238, 0.005, 2];
-
-
+V0=0;
+N = numsamps;
 pfxform = @(pval)[1 1 1].*log(pval); %'forward' parameter transform into Reals
 pbxform = @(phat)[1 1 1].*exp(phat); %'backward' parameter transform into model space
 yfxform = @(y)log(y); % 'forward' transform for data and model output
@@ -499,7 +507,11 @@ J = @(phat) (sum(((mudatavec-modelfun_mu(pbxform(phat))).^2)./(2.*sqrt(var_in_me
 
 
 %% Test moment functions with figures to compare to data
-test2 = modelfun_mu(p)
+test2 = modelfun_mu(p);
+
+figure;
+plot(timevec, var_in_var(p), 'g*')
+
 figure;
 plot(timevec,modelfun_mu(p),'r*')
 hold on
@@ -566,9 +578,9 @@ ylim([0 2500])
 title('Allee model fit to variance of the data')
 xlabel('time(hours)')
 ylabel('variance in cell number')
-
+%%
 k = 3;
-n = N;% or should this be the number of trajectories???
+n = numsamps;% or should this be the number of trajectories???
 %n=numsamps;
 AICbdA = 2*J(pfxform(params_best_JA)) + 2*k
 BICbdA = 2*J(pfxform(params_best_JA)) +log(n)*k

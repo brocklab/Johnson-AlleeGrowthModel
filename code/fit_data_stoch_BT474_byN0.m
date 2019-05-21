@@ -9,6 +9,27 @@ BT= S.BT;
 
 S = load('../out/BTsumfit.mat');
 BTsum= S.BTsum;
+%% Make figure of variance in time for N=4
+
+figure;
+subplot(1,2,1)
+for i = 1:length(BT)
+    if BT(i).N0==4
+        plot(BT(i).time, BT(i).cellnum, 'b.')
+        hold on
+    end
+end
+plot(BTsum(4).timevec, BTsum(4).mu_t, 'LineWidth', 3 ,'color', 'r')
+xlabel ('time (hours)')
+ylabel('Mean in data')
+title(' Measured mean N_{0}=4')
+xlim ([0 336])
+subplot(1,2,2)
+plot(BTsum(4).timevec, BTsum(4).var_t, 'LineWidth', 3 ,'color', 'g')
+xlabel ('time (hours)')
+ylabel('Variance in data')
+title(' Measured variance N_{0}=4')
+xlim ([0 336])
 
 %% Perform Bayesian parameter estimation on birth-death model
 
@@ -402,7 +423,7 @@ profile = [];
 params = BTsum(j).paramsML;
 fval = BTsum(j).negLLML;
 threshold = chi2inv(0.95,length(params))/2 + fval;
-factor = 0.1; %percent range for profile to run across
+factor = .1; %percent range for profile to run across
 numpoints = 10;
 
 
@@ -745,21 +766,21 @@ BTsum(j).varfit = V_fitJst;
 end
 
 %% Plot fit versus data
-
-for j = 3%:length(BTsum)
+figure;
+for j = 9%:length(BTsum)
     subplot(1,2,1)
-    plot(BTsum(j).timevec(2:end), BTsum(j).mufit, 'r-', 'LineWidth',2)
+    plot(BTsum(j).timevec(2:end), BTsum(j).mu_fitMC, 'r-', 'LineWidth',2)
     hold on
     plot(BTsum(j).timevec, BTsum(j).mu_t,'b*-')
     xlabel('time (hours)')
     ylabel('mean cell number')
-    title('fit of mean cell number Allee model')
+    title('fit of mean cell number model')
     
     subplot(1,2,2)
-    plot(BTsum(j).timevec(2:end), BTsum(j).varfit, 'g-', 'LineWidth',2)
+    plot(BTsum(j).timevec(2:end), BTsum(j).var_fitMC, 'g-', 'LineWidth',2)
     hold on
     plot(BTsum(j).timevec, BTsum(j).var_t,'y*-')
     xlabel('time (hours)')
     ylabel('variance in cell number')
-    title('fit of variance in cell number Allee model')
+    title('fit of variance in cell number model')
 end

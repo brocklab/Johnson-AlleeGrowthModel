@@ -1,4 +1,4 @@
- Moment- Approach fitting of stochastic birth-death-Allee process for small cell
+% Moment- Approach fitting of stochastic birth-death-Allee process for small cell
 % number data
 
 % This code is first attempt to use moment-approach (so mean and

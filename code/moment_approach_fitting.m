@@ -20,7 +20,7 @@ close all; clear all; clc
 % assume birth rate = 0.0238, death rate = 0.005
 % Set up time and N counter
 Ninit = [1 2 4 8 16 32 48 64 128];
-Ninit = 4;
+Ninit = 1;
 for i = 1:length(Ninit)
 b = 0.0233 + .0005; % birth rate .0005*i to get b+d to increase
 d = 0.0045 + .0005; % death rate
@@ -201,6 +201,29 @@ n_4_data = mean((Nsamp.^4),2);
 var_data = n_2_data - ((mu_data).^2);
 var4_data = n_4_data - ((mu_data).^4);
 %var_data = (std(Nsamp,0,2).^2);
+
+figure;
+plot(tsamp, mu_data(1:end), 'r*')
+hold on
+plot(tsamp, mu_C, 'k-', 'LineWidth',2)
+xlabel('time (hours)')
+ylabel('Mean (<n>')
+title('Mean (t)')
+legend('simulated mean', 'model mean')
+legend boxoff
+
+figure;
+plot(tsamp, var_data(1:end), 'g*')
+hold on
+plot(tsamp, v2_C, 'k-', 'LineWidth',2)
+xlabel('time (hours)')
+ylabel('Variance')
+title('Variance (t)')
+legend('simulated variance', 'model variance')
+legend boxoff
+
+%%
+
 
 figure;
 subplot(1,4,1)

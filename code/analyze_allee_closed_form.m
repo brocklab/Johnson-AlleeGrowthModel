@@ -33,6 +33,7 @@ params = [g,A];
 % end
 iall = find(tlong>=0);
 %%
+N0 = [ 5, 10, 20];
 Nmodel = simmodelAllee(params, tbig, N0);
 %Nmodel = round(Nmodel,0);
 Nmodellong = simmodelAlleelong(params, tlong,iall, N0);
@@ -42,6 +43,7 @@ Nmodellong = simmodelAlleelong_distrib(params,sigma, tlong, N0);
 % test
 
 %%
+eta = 1;
 noise = eta*(1-2*randn(length(tbig),length(N0)));
 Nfake = Nmodel + noise;
 % eliminate negative values in noisy data
@@ -172,9 +174,9 @@ figure;
 hold off
 for j = 1:length(N0)
     hold on
-    semilogy(tbig(j,:), Nfit(:,j), 'LineWidth', 3)
+    semilogy(tbig(j,:), Nfit(:,j), 'LineWidth', 3,'color', 'b')
     hold on
-    semilogy(tbig(j,:), Nfake(:,j), 'LineWidth', 2)
+    semilogy(tbig(j,:), Nfake(:,j), 'LineWidth', 2, 'color', 'g')
     text(tbig(j, end-27), Nfit(end-27,j), [ 'N_{0} = ', num2str(N0(j)) ],'HorizontalAlignment','left','VerticalAlignment','bottom','color','k')
    % plot(tout, Nfake(:,j), 'o')
    %ylim([ 0 200])
@@ -182,7 +184,9 @@ end
 semilogy(tlong, Nfitsing, 'r.')
 xlabel('time')
 ylabel('N')
-title(['Simulated Data vs. Fitted Model, A= ', num2str(A), ', A_{fit}=',num2str(params_Bayes(2)), 'vs. Single Exponential Fit, g_{fit}=', num2str(params_sing)])
+ylim([0 100])
+%title('Allee vs. single exponential model')
+%title(['Simulated Data vs. Fitted Model, A= ', num2str(A), ', A_{fit}=',num2str(params_Bayes(2)), 'vs. Single Exponential Fit, g_{fit}=', num2str(params_sing)])
 %legend('N_{0} = 2', 'N_{0} = 5', 'N_{0} = 10', 'N_{0} = 12', 'N_{0} = 20')
 legend boxoff
 

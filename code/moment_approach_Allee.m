@@ -132,9 +132,10 @@ plot(tstate(:,j), state(:,j))
 hold on
 end
 xlim([0, tmin])
-xlabel('time (hours)')
-ylabel('Number of cells')
-title(['Simulated N(t) trajectories for b=', num2str(b), ' & d=', num2str(d)])
+xlabel('time (hours)', 'FontSize', 16)
+ylabel('Number of cells (N(t))', 'FontSize', 16)
+title('Simulated stochastic trajectories for N_{0}=5', 'FontSize', 14)
+%title(['Simulated N(t) trajectories for b=', num2str(b), ' & d=', num2str(d)])
 
 
 %% UNIFORM SAMPLING from stochastic trajectories 
@@ -165,9 +166,9 @@ plot(tstate(:,j), state(:,j),'b.');
 end
 plot(tsamp, mu_data, 'k-', 'LineWidth',3)
 xlabel ('time (hours)')
-ylabel('<n> expected')
+ylabel('number of cells')
 xlim([0, tsamp(end)])
-title('Mean value of N in time for N0=5, A = 2')
+%title('Mean value of N in time for N0=5, A = 2')
 %% Expected values for Allee model
 % need to change all ODEs
 % tsamp =tsamp(5:end);
@@ -218,34 +219,36 @@ var4_data = n_4_data - ((mu_data).^4);
 %var_data = (std(Nsamp,0,2).^2);
 
 figure;
-subplot(1,3,1)
+subplot(1,2,1)
 plot(tsamp, mu_data(1:end), 'r*')
 hold on
 plot(tsamp, mu_C, 'k-', 'LineWidth',2)
 xlabel('time (hours)')
-ylabel('<n>')
-title('Expected vs. simulated <n> Allee model')
-legend('mean n simulated data', 'expected mean n')
+ylabel('Mean cell number')
+%title('Strong Allee on birth mean', 'FontSize', 14)
+title('Mean', 'FontSize', 14)
+legend('mean simulated data', 'expected mean', 'FontSize',12, 'Location', 'NorthWest')
 legend boxoff
 
-subplot(1,3,2)
-plot(tsamp, n_2_data(1:end), 'g*')
-hold on
-plot(tsamp, n2_C, 'b.', 'LineWidth',2)
-xlabel('time (hours)')
-ylabel('<n2>')
-title('Expected vs. simulated <n2>')
-legend('<n2> in simulated data', 'expected <n2>')
-legend boxoff
+% subplot(1,3,2)
+% plot(tsamp, n_2_data(1:end), 'g*')
+% hold on
+% plot(tsamp, n2_C, 'b.', 'LineWidth',2)
+% xlabel('time (hours)')
+% ylabel('<n2>')
+% title('Expected vs. simulated <n2>')
+% legend('<n2> in simulated data', 'expected <n2>')
+% legend boxoff
 
-subplot(1,3,3)
-plot(tsamp, var_data(1:end), 'm*')
+subplot(1,2,2)
+plot(tsamp, var_data(1:end), 'g*')
 hold on
-plot(tsamp, v2_C, 'b.', 'LineWidth',2)
+plot(tsamp, v2_C, 'k-', 'LineWidth',2)
 xlabel('time (hours)')
 ylabel('Variance')
-title('Expected vs.  simulated Variance')
-legend('Variance in simulated data', 'expected Variance')
+%title('Strong Allee on birth variance', 'FontSize', 14)
+title ('Variance', 'FontSize',14)
+legend('variance in simulated data', 'expected variance', 'FontSize',12, 'Location', 'NorthWest')
 legend boxoff
 %%
 figure;
